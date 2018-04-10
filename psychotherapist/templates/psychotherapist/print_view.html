@@ -1,0 +1,125 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Psychotherapist - Strona główna</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+    <!--font awesome icons-->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/psychotherapist/">Psychotherapist</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class=""><a href="/psychotherapist/add_patient/">Dodaj Pacjenta</a></li>
+            <li class=""><a href="/psychotherapist/list_patients/">Lista Pacjentów</a></li>
+            <li class=""><a href="#">Kalendarz</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-caret-square-o-down fa-fw"></i>
+                    {{ username }}</a>
+                <ul class="dropdown-menu pull-right">
+                    <li class=""><a href="/psychotherapist/admin/"><i class="fa fa-desktop fa-fw"></i>
+                        Panel Administratora</a></li>
+                    <li class=""><a href="/psychotherapist/adm_ch_pass/"><i class="fa fa-key fa-fw"></i>
+                        Zmień Hasło</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/psychotherapist/user_logout/"><i class="fa fa-sign-out fa-fw"></i>
+                        Wyloguj się</a></li>
+                </ul>
+            </li>
+            <!--<li><a href="#"><span class="glyphicon glyphicon-user"> {{ username }}</span></a></li>-->
+            <!--<li><a href="/psychotherapist/user_logout/"><span class="glyphicon glyphicon-log-out"> Wyloguj się</span></a></li>-->
+        </ul>
+    </div>
+    <!--test repository settings-->
+</nav>
+
+<div class="container">
+    <div class="jumbotron">
+        <div class="col-md-1 col-md-offset-11"><button class="btn btn-default printMe" title="Drukuj"><i class="fa fa-print"></i></button></div>
+        <div class="hidden-print">
+            <div class="row">
+                <div class="col-md-4"><h2>{{ patient.first_name }}, lat {{ patient.age }}</h2></div>
+            </div>
+            <label for="info">Opis:</label>
+            <div class="row" id="info">
+                <div class="col-md-8 col-md-offset-2">{{ patient.info }}</div>
+            </div><br>
+            {% for session in sessions %}
+            <label for="id_{{ session.session_number }}"><h3>Sesja {{ session.session_number }} - {{ session.subject }}</h3></label>
+            <div class="row" id="id_{{ session.session_number }}">
+                <!--<label for="cnt_{{ session.session_number }}">Opis:</label>-->
+                <div class="row" id="cnt_{{ session.session_number }}">
+                    <div class="col-md-8 col-md-offset-2">
+                        <b>Opis:</b><br>
+                        {{ session.content }}
+                    </div>
+                </div>
+                <br>
+                <!--<label for="not_{{ session.session_number }}">Notatki:</label>-->
+                <div class="row" id="not_{{ session.session_number }}">
+                    <div class="col-md-8 col-md-offset-2">
+                        <b>Notatki:</b><br>
+                        {{ session.notes }}
+                    </div>
+                </div>
+            </div>
+            <br><br>
+            {% endfor %}
+        </div>
+        <div class="visible-print-block">
+            <div class="row">
+                <div class="col-xs-4"><h2>{{ patient.first_name }}, lat {{ patient.age }}</h2></div>
+            </div>
+            <label for="info">Opis:</label>
+            <div class="row" id="info">
+                <div class="col-xs-8 col-xs-offset-2"><p class="text-justify">{{ patient.info }}</p></div>
+            </div><br>
+            {% for session in sessions %}
+            <label for="id_{{ session.session_number }}"><h3>Sesja {{ session.session_number }} - {{ session.subject }}</h3></label>
+            <div class="row" id="id_{{ session.session_number }}">
+                <!--<label for="cnt_{{ session.session_number }}">Opis:</label>-->
+                <div class="row" id="cnt_{{ session.session_number }}">
+                    <div class="col-xs-8 col-xs-offset-2 text-justify">
+                        <b>Opis:</b><br>
+                        {{ session.content }}
+                    </div>
+                </div>
+                <br>
+                <!--<label for="not_{{ session.session_number }}">Notatki:</label>-->
+                <div class="row" id="not_{{ session.session_number }}">
+                    <div class="col-xs-8 col-xs-offset-2 text-justify">
+                        <b>Notatki:</b><br>
+                        {{ session.notes }}
+                    </div>
+                </div>
+            </div>
+            <br><br>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('.printMe').click(function(){
+     window.print();
+});
+</script>
+
+</body>
+</html>

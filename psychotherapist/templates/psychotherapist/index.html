@@ -1,0 +1,65 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Psychotherapist - Strona główna</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <!--font awesome icons-->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-sm bg-info navbar-dark">
+    <a class="navbar-brand" href="/">Psychotherapist</a>
+    <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"></i>
+                {{ username }}</a>
+            <div class="dropdown-menu">
+                {% if user.is_superuser %}
+                <a class="dropdown-item" href="/admin/">
+                    <i class="fas fa-cog fa-spin fa-fw"></i>
+                    Panel Administratora</a>
+                {% else %}
+                {% endif %}
+                <a class="dropdown-item" href="/admin/password_change/">
+                    <i class="fas fa-key fa-fw"></i>
+                    Zmień hasło</a>
+                <a class="dropdown-item" href="/user_logout/">
+                    <i class="fas fa-sign-out-alt fa-fw"></i>
+                    Wyloguj się</a>
+            </div>
+        </li>
+    </ul>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="/add_patient/">Dodaj Pacjenta</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/list_patients/">Lista Pacjentów <span class="badge badge-pill badge-secondary">{{ patient_count }}</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/payment_list/">Płatności</a>
+        </li>
+    </ul>
+
+</nav>
+
+
+<div class="container">
+    <div class="jumbotron">
+        <h2>Witaj {{ firstname }}!</h2>
+        <h4>Co chcesz dzisiaj robić? Wybierz jedną z opcji w pasku nawigacyjnym na górze.</h4>
+    </div>
+</div>
+
+</body>
+</html>

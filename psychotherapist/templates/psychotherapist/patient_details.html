@@ -1,0 +1,300 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ username }} - Pacjent: {{ patient.firstName }} {{ patient.lastName }}</title>
+
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/locale/pl.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha18/js/tempusdominus-bootstrap-4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha18/css/tempusdominus-bootstrap-4.min.css" />
+
+    <!--font awesome icons-->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+    <!--data tables-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+
+
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-info navbar-dark">
+    <a class="navbar-brand" href="/">Psychotherapist</a>
+    <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"></i>
+                {{ username }}</a>
+            <div class="dropdown-menu">
+                {% if user.is_superuser %}
+                <a class="dropdown-item" href="/admin/">
+                    <i class="fas fa-cog fa-spin fa-fw"></i>
+                    Panel Administratora</a>
+                {% else %}
+                {% endif %}
+                <a class="dropdown-item" href="/admin/password_change/">
+                    <i class="fas fa-key fa-fw"></i>
+                    Zmień hasło</a>
+                <a class="dropdown-item" href="/user_logout/">
+                    <i class="fas fa-sign-out-alt fa-fw"></i>
+                    Wyloguj się</a>
+            </div>
+        </li>
+    </ul>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="/add_patient/">Dodaj Pacjenta</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/list_patients/">Lista Pacjentów <span class="badge badge-pill badge-secondary">{{ patient_count }}</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/payment_list/">Płatności</a>
+        </li>
+    </ul>
+
+</nav>
+
+<div class="container">
+    <div class="jumbotron">
+        <div id="add_session_modal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h3 class="modal-title">Dodaj sesje</h3>
+                        </div>
+                        <div class="modal-body">
+                            <label for="session_count">Liczba sesji:</label>
+                            <input type="text" class="form-control" id="session_count" name="session_count" required/>
+                            <br>
+                            <label for="gender">Częstotliwość sesji:</label>
+                            <select class="form-control" id="session_pattern" name="session_pattern" required>
+                                <option value="0" selected>Bez dat</option>
+                                <option value="7">Raz w tygodniu</option>
+                                <option value="14">Raz na dwa tygodnie</option>
+                            </select>
+                            <p class="text-muted small">Wybrana data pierwszej sesji określa stały dzień tygodnia oraz stałą godzinę dla wszystkich kolejnych sesji.</p>
+                            <br>
+                            <label for="init_session">Data pierwszej sesji:</label>
+                            <div class="form-group">
+                                <div class="input-group date" id="init_session" data-target-input="nearest">
+                                    <input type="text" class="form-control datetimepicker-input" data-target="#init_session"
+                                           name="init_session"
+                                           pattern="([0-9]{4}[-][0-9]{2}[-][0-9]{2} [0-9]{2}:[0-9]{2})"
+                                           title="Wymagany format daty: rrrr-mm-dd hh:mm"/>
+                                    <div class="input-group-append" data-target="#init_session" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fas fa-calendar-alt"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                                $('#init_session').datetimepicker({
+                                            format: 'YYYY-MM-DD HH:mm'
+                                            });
+                            </script>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="btn-group">
+                                <a class="btn btn-danger" href="/list_patients/">Anuluj</a>
+                                <button type="submit" class="btn btn-success" name="add_session" value="save">Zapisz</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4">
+                {% if state == "" %}
+                {% else %}
+                <div class="alert alert-success alert-dismissible fade show">
+                    <i class="fas fa-check-square fa-lg"></i>
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    &nbsp;{{ state }}
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-4"></div>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col">
+                    <span class="badge badge-info">Identyfikator pacjenta: {{ patient.id }}</span>
+                </div>
+                <div class="col">
+                    <span class="badge badge-info">Data dodania: {{ patient.registerDate|date:'Y-m-d H:m' }}</span>
+                </div>
+            </div><br>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="firstName">Imię:</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName"
+                           pattern="[A-Z]{1}[a-z]{2,}" title="Rozpocznij wielką literą, min. 3 znaki" required
+                           value="{{ patient.firstName }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="lastName">Nazwisko:</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName"
+                           pattern="[A-Z]{1}[a-z]{2,}" title="Rozpocznij wielką literą, min. 3 znaki" required
+                           value="{{ patient.lastName }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="bday">Data urodzenia:</label>
+                    <input type="text" class="form-control" id="bday" name="bday" disabled
+                           value="{{ patient.dob|date:'Y-m-d' }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="gender">Płeć Pacjenta:</label>
+                    <select class="form-control" id="gender" name="gender" required>
+                        {% if patient.gender == "M" %}
+                        <option selected value="M">Mężczyzna</option>
+                        <option value="K">Kobieta</option>
+                        <option value="NN">NN</option>
+                        {% elif patient.gender == "K" %}
+                        <option value="M">Mężczyzna</option>
+                        <option selected value="K">Kobieta</option>
+                        <option value="NN">NN</option>
+                        {% elif patient.gender == "NN" %}
+                        <option value="M">Mężczyzna</option>
+                        <option value="K">Kobieta</option>
+                        <option selected value="NN">NN</option>
+                        {% endif %}
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <label for="patient_info">Info:</label>
+                <textarea class="form-control" id="patient_info" name="patient_info" required rows="8">{{ patient.bio }}</textarea>
+            </div>
+
+            <br>
+            <div class="row">
+                <div class="container-fluid">
+                    {% for session in session_list %}
+                    <input type="hidden" name="sessionList" id="sessionList" class="form-control"
+                           value="{{ session.sessionNo }}"/>
+                    <hr>
+                    <div class="card">
+                        <div class="card-header bg-info border-0 d-flex align-items-center">
+                            <div>
+                                <h3>
+                                    <span class="badge badge-dark px-2">Numer sesji:
+                                <span class="badge badge-light px-1">{{ session.sessionNo }}</span>
+                                </span>
+                                </h3>
+                            </div>
+                            <span class="badge badge-dark ml-auto px-2">Systemowy Identyfikator Sesji:
+                                <span class="badge badge-light px-1">{{ session.id }}</span>
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <label>Data sesji:</label>
+                                    <div class="form-group">
+                                        <div class="input-group date" id="datetimepicker{{ session.sessionNo }}" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker{{ session.sessionNo }}"
+                                                   value="{{ session.sessionDate|date:'Y-m-d H:i' }}" name="session_date_{{ session.sessionNo }}"
+                                                   pattern="([0-9]{4}[-][0-9]{2}[-][0-9]{2} [0-9]{2}:[0-9]{2})"
+                                                   title="Wymagany format daty: rrrr-mm-dd hh:mm"/>
+                                            <div class="input-group-append" data-target="#datetimepicker{{ session.sessionNo }}" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fas fa-calendar-alt"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <script type="text/javascript">
+
+                                        $(function () {
+                                        var a = "{{ session.sessionNo }}";
+                                        var b = "#datetimepicker";
+                                        var c = b+a;
+                                            $(c).datetimepicker({
+                                            format: 'YYYY-MM-DD HH:mm'
+                                            });
+                                        });
+                                    </script>
+
+                                </div>
+
+                                <div class="col">
+                                    <label for="session_subject_{{ session.sessionNo }}">Temat:</label>
+                                    <input type="text" name="session_subject_{{ session.sessionNo }}"
+                                           id="session_subject_{{ session.sessionNo }}"
+                                           class="form-control" value="{{ session.subject }}" />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label for="session_content">Opis:</label>
+                                <textarea name="session_content_{{ session.sessionNo }}" id="session_content" rows="8"
+                                          class="form-control">{{ session.content }}</textarea>
+                            </div>
+                            <div class="row">
+                                <label for="session_notes">Notatki:</label>
+                                <textarea name="session_notes_{{ session.sessionNo }}" id="session_notes" rows="4"
+                                          class="form-control">{{ session.notes }}</textarea>
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex align-items-center">
+                            <div class="btn-group mx-auto">
+                                <button type="submit" name="remove" class="btn btn-danger mx-auto" title="Usuń sesję"
+                                        value="{{ session.sessionNo }}">Usuń sesję</button>
+                                <button type="submit" name="save" class="btn btn-success mx-auto" title="Zapisz sesję"
+                                        value="{{ session.sessionNo }}">Zapisz sesję</button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+            <hr>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-5">
+                    <div class="btn-group">
+                        <a class="btn btn-danger" href="/list_patients/">Anuluj</a>
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#add_session_modal">Dodaj sesje</button>
+                        <button type="submit" class="btn btn-success" name="mod_patient" value="save">Zapisz</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<!--bootstrap-touchspin plugin load-->
+<script src="{% static 'js/jquery.bootstrap-touchspin.js' %}"></script>
+<script type="text/javascript">
+    $("input[name='session_count']").TouchSpin({
+        initval: 5,
+        min: 1,
+        step: 1,
+        decimals: 0,
+    });
+
+</script>
+
+
+
+</body>
+</html>

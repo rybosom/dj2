@@ -1,0 +1,77 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Psychotherapist - Logowanie</title>
+
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
+
+    <!--&lt;!&ndash;font awesome icons&ndash;&gt;-->
+    <!--<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>-->
+
+</head>
+<body>
+<br>
+<div class="container">
+    <form class="form-horizontal" role="form" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <h2>Logowanie</h2>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="form-group has-danger">
+                    <label class="sr-only" for="username">Nazwa użytkownika</label>
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fas fa-user-md fa-fw"></i></div>
+                        <input type="text" name="username" class="form-control" id="username"
+                               placeholder="Nazwa użytkownika" required autofocus>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                {% if state == 'user_invalid' %}
+                <div class="form-control-feedback">
+                    <span class="text-danger align-middle">
+                        <i class="fas fa-ban"></i>Nazwa użytkownika lub hasło niepoprawne
+                    </span>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="sr-only" for="usr_pass">Password</label>
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fas fa-key fa-fw"></i></div>
+                        <input type="password" name="password" class="form-control" id="usr_pass"
+                               placeholder="Hasło" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding-top: 1rem">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-success"><i class="fas fa-sign-in-alt"></i> Zaloguj</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+</body>
+</html>

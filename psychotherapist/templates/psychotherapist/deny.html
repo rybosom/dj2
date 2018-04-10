@@ -1,0 +1,41 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ username }} - Brak dostępu</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <!--font awesome icons-->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+</head>
+<body>
+<br>
+<br>
+<div class="container">
+    <div class="col"></div>
+    <div class="col">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h2>Brak uprawnień :: {{ firstname }}</h2>
+            </div>
+            <div class="card-body">
+                <center><img src="{% static 'media/padlock.png'%}" class="img-responsive"></center>
+                <h4>Aktualnie nie posiadasz uprawnień by odwiedzić tę stronę. Jeśli uważasz, że to pomyłka - skontaktuj się z administratorem.</h4>
+            </div>
+            <div class="card-footer bg-info text-white">
+                <a class="text-white" href="mailto:info@pracowniarelacji.pl">Kontakt z administratorem</a> &nbsp;lub&nbsp; <a class="text-white" href="/">powrót do strony głównej</a>.
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>
+
+</body>
+</html>
