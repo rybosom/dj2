@@ -1,0 +1,89 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Psychotherapist.pl :: Zmiana hasła</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <!--font awesome icons-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
+
+</head>
+<body>
+<div class="jumbotron">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col align-self-center">
+                <form method="post">
+                    {% csrf_token %}
+                    <h1 class="h3 mb-3 font-weight-normal">Zmiana hasła</h1>
+                    <div class="form-group">
+                        <label for="oldPass">Podaj stare hasło:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-key fa-fw"></i></span>
+                            </div>
+                            <input type="password" id="oldPass" name="oldPass" class="form-control" placeholder="Hasło" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPass">Podaj nowe hasło:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-key fa-fw"></i></span>
+                            </div>
+                            <input type="password" id="newPass" name="newPass" class="form-control" placeholder="Hasło"
+                                   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                   Title="Podane hasło nie spełnia wymogów bezpieczeństwa." required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassRep">Powtórz nowe hasło:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-key fa-fw"></i></span>
+                            </div>
+                            <input type="password" id="newPassRep" name="newPassRep" class="form-control" placeholder="Hasło"
+                                   oninput="check(this)" required>
+                        </div>
+                    </div>
+                    {% if state is None %}
+                    {% else %}
+                    <div class="alert alert-danger ml-auto">
+                        <div class="d-flex justify-content-center">
+                            {{ state }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <p class="small text-muted">Nowe hasło musi składać się z minimum 8 znaków, jednej małej i wielkiej litery oraz cyfry</p>
+                    <button class="btn btn-md btn-primary btn-block" type="submit" value="save" name="save">Zapisz</button>
+                    <a href="/" class="btn btn-sm btn-info btn-block">Powrót</a>
+                </form>
+
+                <script language='javascript' type='text/javascript'>
+                    function check(input) {
+                        if (input.value != document.getElementById('newPass').value) {
+                            input.setCustomValidity('Podane hasła nie są identyczne');
+                        } else {
+                            // input is valid -- reset the error message
+                            input.setCustomValidity('');
+                        }
+                    }
+                </script>
+
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
