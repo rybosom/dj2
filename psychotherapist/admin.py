@@ -1,10 +1,10 @@
 from django.contrib import admin
-from psychotherapist.models import Patient, Session
+from psychotherapist.models import Patient, Session, UserProfile, ActivityLog, CommunicationLog
 
 
 class PatientAdmin(admin.ModelAdmin):
     exclude = ('owner',)
-    list_display = ('pk', 'firstName', 'lastName', 'dob', 'bio', 'owner')
+    list_display = ('pk', 'firstName', 'lastName', 'byear', 'owner', 'registerDate', 'lastMod')
 
     def has_change_permission(self, request, obj=None):
         has_class_permission = super(PatientAdmin, self).has_change_permission(request, obj)
@@ -30,7 +30,7 @@ admin.site.register(Patient, PatientAdmin)
 
 class SessionAdmin(admin.ModelAdmin):
     list_display = ('pk', 'patient_id', 'sessionNo', 'sessionDate', 'subject',
-                    'paymentDate', 'amount', 'method')
+                    'paymentDate', 'amount', 'method', 'timestamp', 'lastMod')
 
     def has_change_permission(self, request, obj=None):
         has_class_permission = super(SessionAdmin, self).has_change_permission(request, obj)
@@ -49,4 +49,25 @@ class SessionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Session, SessionAdmin)
+
+
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'user_id', 'consent', 'consentTime')
+
+
+admin.site.register(UserProfile, UserProfileAdmin)
+
+
+class ActivityLogAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'timestamp', 'user_id', 'userIP', 'detail', 'url')
+
+
+admin.site.register(ActivityLog, ActivityLogAdmin)
+
+
+class CommunicationLogAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'timestamp', 'commType', 'rcpt', 'exception', 'content')
+
+
+admin.site.register(CommunicationLog, CommunicationLogAdmin)
 

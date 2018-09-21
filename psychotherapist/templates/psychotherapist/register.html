@@ -1,0 +1,116 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pl-pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Psychotherapist - Rejestracja</title>
+
+
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/login.css" />
+
+
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/responsive.css" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</head>
+<body class="login">
+<div id="container">
+    <div id="header">
+        <div id="branding">
+            <h1 id="site-name"><a href="/">Rejestracja</a></h1>
+        </div>
+    </div>
+
+    <div id="content">
+        <div id="content-main">
+            <form method="post" id="login-form">
+                {% csrf_token %}
+                <div class="row">
+                    <label class="required" for="id_firstname">Imię:</label> <input class="form-control" type="text" name="id_firstname" autofocus id="id_firstname" maxlength="254" required />
+                </div>
+                <div class="row">
+                    <label class="required" for="id_lastname">Nazwisko:</label> <input class="form-control" type="text" name="id_lastname" id="id_lastname" maxlength="254" required />
+                </div>
+                <div class="row">
+                    <label class="required" for="id_email">Email:</label> <input class="form-control" type="email" name="id_email" id="id_email" maxlength="254" required />
+                </div>
+                <div class="row">
+                    <label class="required" for="id_password">Hasło:</label> <input class="form-control" type="password" name="id_password" id="id_password" required />
+                </div>
+                <div class="row">
+                    <label class="required" for="id_rep_password">Powtórz hasło:</label> <input class="form-control" type="password" name="id_rep_password" id="id_rep_password" required />
+                </div>
+                {% if state == '1' %}
+                <div class="row">
+                    <p class="text-danger">*Podane hasła nie są identyczne</p>
+                </div>
+                {% elif state == '2' %}
+                <div class="row">
+                    <p class="text-success">Twój użytkownik "{{ user }}" został poprawnie utworzony jednak musi zostać zaakceptowany przez administratora. Zostaniesz poinformowany mailowo o aktywacji konta.</p>
+                </div>
+                {% endif %}
+                <br>
+                <!--<div class="row">-->
+                    <!--<input type="checkbox" value="test" required />&nbsp;<p class="help">Akceptacja regulaminu</p>-->
+                <!--</div>-->
+                <div class="row">
+                    <p class="help"><input type="checkbox" value="test" required />&nbsp;Wyrażam zgodę na <a href="#" data-toggle="modal" data-target="#rodo_modal">przetwarzanie danych</a> w ramach korzystania z aplikacji psychotherapist.pl</p>
+                </div>
+                <div class="submit-row">
+                    <label></label><input type="submit" value="Zarejestruj" />
+                </div>
+            </form>
+        </div>
+        <br class="clear" />
+    </div>
+    <div id="footer"></div>
+
+    <div class="modal" id="rodo_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">ZGODA NA PRZETWARZANIE DANYCH W RAMACH KORZYSTANIA Z APLIKACJI PSYCHOTHERAPIST.PL</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <p class="h6">Zakres danych użytkownika aplikacji:</p>
+                    <ul>
+                        <li>Imię i nazwisko</li>
+                        <li>Adres e-mail</li>
+                        <li>Adres IP</li>
+                        <li>Dane sesji przeglądarki</li>
+                    </ul>
+
+                    <p class="h6">
+                        Podmiot administrujący danymi:<br>
+                        <small>DEVOPS Adrian Chrostowski, z siedzibą przy ul. Wojciechowskiego 39/121, 02-495 Warszawa, NIP 5212306548.<br>
+                        Przetwarzane dane są przechowywanie na wirtualnych serwerach dzierżawionych od firmy Microsoft i nie są udostępniane żadnym podmiotom trzecim.<br>
+                        </small>
+                    </p>
+                    <br>
+                    <small class="text-muted">
+                        Żądania dot. zmiany, wyciągu lub usunięcia danych należy wysłać na adres email: kontakt@psychotherapist.pl
+                    </small>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Zamknij</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

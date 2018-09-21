@@ -12,25 +12,28 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <!--font awesome icons-->
-    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
 </head>
 <body>
 
 <nav class="navbar navbar-expand-sm bg-info navbar-dark">
-    <a class="navbar-brand" href="/">Psychotherapist</a>
+    <a class="navbar-brand" href="/"><i class="fas fa-brain fa-lg"></i>&nbsp;Psychotherapist</a>
     <ul class="navbar-nav">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"></i>
-                {{ username }}</a>
+                <i class="fas fa-user-md fa-lg"></i>&nbsp;{{ username }}</a>
             <div class="dropdown-menu">
                 {% if user.is_superuser %}
                 <a class="dropdown-item" href="/admin/">
+                    <i class="fab fa-python fa-fw"></i>
+                    Panel Django</a>
+                <a class="dropdown-item" href="/psycho_admin/">
                     <i class="fas fa-cog fa-spin fa-fw"></i>
                     Panel Administratora</a>
                 {% else %}
                 {% endif %}
-                <a class="dropdown-item" href="/admin/password_change/">
+                <a class="dropdown-item" href="/change_pass/">
                     <i class="fas fa-key fa-fw"></i>
                     Zmień hasło</a>
                 <a class="dropdown-item" href="/user_logout/">
@@ -41,23 +44,54 @@
     </ul>
     <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link" href="/add_patient/">Dodaj Pacjenta</a>
+            <a class="nav-link" href="/add_patient/"><i class="fas fa-user-plus fa-lg"></i>&nbsp;Dodaj Pacjenta</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/list_patients/">Lista Pacjentów <span class="badge badge-pill badge-secondary">{{ patient_count }}</span></a>
+            <a class="nav-link" href="/list_patients/"><i class="fas fa-clipboard-list fa-lg"></i><span class="badge badge-pill badge-secondary">{{ patient_count }}</span>&nbsp;Lista Pacjentów </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/payment_list/">Płatności</a>
+            <a class="nav-link" href="/payment_list/"><i class="fas fa-hand-holding-usd fa-lg"></i>&nbsp;Płatności</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% static 'media/psychotherapist.pdf'%}" target="_blank"><i class="fas fa-file-pdf fa-lg"></i>&nbsp;Instrukcja</a>
         </li>
     </ul>
 
 </nav>
 
 
-<div class="container">
-    <div class="jumbotron">
-        <h2>Witaj {{ firstname }}!</h2>
-        <h4>Co chcesz dzisiaj robić? Wybierz jedną z opcji w pasku nawigacyjnym na górze.</h4>
+<div class="jumbotron">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4">
+                <div class="card">
+                    <!--<img class="card-img-top" src="{% static 'media/user-md-symbol.png'%}" alt="Card image">-->
+                    <div class="card-header">
+                        <h4><i class="fas fa-user-md fa-lg"></i>&nbsp;Witaj {{ firstname }}!</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="small text-muted">{{ date }}</p>
+                        <p class="small">Co chcesz dzisiaj robić? Wybierz jedną z opcji w pasku nawigacyjnym na górze.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-7">
+                <div class="card">
+                    <div class="card-header">
+                        Lista planowanych do wdrożenia funkcji:
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item"><i class="fas fa-bell fa-lg"></i>&nbsp;Powiadomienia mailowe lub smsowe dla pacjentów o zbliżających się wizytach</li>
+                            <li class="list-group-item"><i class="fas fa-chart-bar fa-lg"></i>&nbsp;Statystyki liczby pacjentów w terapii oraz wizyt</li>
+                            <li class="list-group-item"><i class="fas fa-file-pdf fa-lg"></i>&nbsp;Generowanie dokumentacji pacjenta w formie pliku pdf</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </div>
 

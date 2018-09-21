@@ -14,6 +14,10 @@
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/static/admin/css/responsive.css" />
 
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
+
 </head>
 <body class="login">
 <div id="container">
@@ -25,6 +29,11 @@
 
     <div id="content">
         <div id="content-main">
+            {% if state == "user_invalid" %}
+            <div class="alert alert-danger" role="alert">
+                <p class="errornote">Nazwa użytkownika i/lub hasło niepoprawne.</p>
+            </div>
+            {% endif %}
             <form method="post" id="login-form">
                 {% csrf_token %}
                 <div class="form-row">
@@ -35,6 +44,10 @@
                 </div>
                 <div class="submit-row">
                     <label></label><input type="submit" value="Zaloguj" />
+                </div>
+                <br>
+                <div class="form-row">
+                    <p class="help">Nie masz konta? Przejdź do <a href="/register/">rejestracji.</a></p>
                 </div>
             </form>
         </div>

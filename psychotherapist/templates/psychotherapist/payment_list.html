@@ -12,7 +12,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <!--font awesome icons-->
-    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
     <!--data tables-->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
@@ -23,19 +23,22 @@
 <body>
 
 <nav class="navbar navbar-expand-sm bg-info navbar-dark">
-    <a class="navbar-brand" href="/">Psychotherapist</a>
+    <a class="navbar-brand" href="/"><i class="fas fa-brain fa-lg"></i>&nbsp;Psychotherapist</a>
     <ul class="navbar-nav">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"></i>
-                {{ username }}</a>
+                <i class="fas fa-user-md fa-lg"></i>&nbsp;{{ username }}</a>
             <div class="dropdown-menu">
                 {% if user.is_superuser %}
                 <a class="dropdown-item" href="/admin/">
+                    <i class="fab fa-python fa-fw"></i>
+                    Panel Django</a>
+                <a class="dropdown-item" href="/psycho_admin/">
                     <i class="fas fa-cog fa-spin fa-fw"></i>
                     Panel Administratora</a>
                 {% else %}
                 {% endif %}
-                <a class="dropdown-item" href="/admin/password_change/">
+                <a class="dropdown-item" href="/change_pass/">
                     <i class="fas fa-key fa-fw"></i>
                     Zmień hasło</a>
                 <a class="dropdown-item" href="/user_logout/">
@@ -46,13 +49,16 @@
     </ul>
     <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link" href="/add_patient/">Dodaj Pacjenta</a>
+            <a class="nav-link" href="/add_patient/"><i class="fas fa-user-plus fa-lg"></i>&nbsp;Dodaj Pacjenta</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/list_patients/">Lista Pacjentów <span class="badge badge-pill badge-secondary">{{ patient_count }}</span></a>
+            <a class="nav-link" href="/list_patients/"><i class="fas fa-clipboard-list fa-lg"></i><span class="badge badge-pill badge-secondary">{{ patient_count }}</span>&nbsp;Lista Pacjentów </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" href="/payment_list/">Płatności</a>
+            <a class="nav-link active" href="/payment_list/"><i class="fas fa-hand-holding-usd fa-lg"></i>&nbsp;Płatności</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% static 'media/psychotherapist.pdf'%}" target="_blank"><i class="fas fa-file-pdf fa-lg"></i>&nbsp;Instrukcja</a>
         </li>
     </ul>
 
@@ -66,7 +72,6 @@
             <table id="patients" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                 <tr>
-                    <th>Akcja</th>
                     <th>Imię i Nazwisko Pacjenta</th>
                     <th>Numer Sesji</th>
                     <th>Data Sesji</th>
@@ -78,38 +83,13 @@
                 <tbody>
                 {% for n in objects %}
                 <tr name="object_{{ n.patient.pk }}">
-                    <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#remove_{{ n.pk }}" title="Usuń płatność"><i class="far fa-trash-alt"></i></button>
-                        <a href="{% url 'patient_payments' n.patient_id.pk %}" class="btn btn-info" title="Edytuj płatności"><i class="far fa-edit"></i></a>
-                    </td>
-                    <td>{{ n.patient_id.firstName }} {{ n.patient_id.lastName }}</td>
+                    <td><a href="{% url 'patient_payments' n.patient_id.pk %}" class="btn btn-info" title="Edycja płatności"><i class="fas fa-hand-holding-usd fa-lg"></i> {{ n.patient_id.firstName }} {{ n.patient_id.lastName }}</a></td>
                     <td>{{ n.sessionNo }}</td>
                     <td>{{ n.sessionDate|date:'Y-m-d' }}</td>
                     <td>{{ n.paymentDate|date:'Y-m-d' }}</td>
                     <td>{{ n.amount|default_if_none:'' }}</td>
                     <td>{{ n.method|default_if_none:'' }}</td>
                 </tr>
-
-                <div id="remove_{{ n.pk }}" class="modal fade" role="dialog">
-                    <div class="modal-dialog modal-sm">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Pacjent: <strong>{{ n.patient_id.firstName }} {{ n.patient_id.lastName }}</strong></h4>
-                            </div>
-                            <div class="modal-body">
-                                Kwota płatności: <strong>{{ n.amount }}</strong><br>
-                                Data płatności: <strong>{{ n.paymentDate|date:'Y-m-d' }}</strong><br>
-                                Czy na pewno chcesz usunąć tę płatność?
-                            </div>
-                            <div class="modal-footer">
-                                <div class="btn-group">
-                                    <a class="btn btn-danger" href="/payment_list/">Anuluj</a>
-                                    <button type="submit" class="btn btn-success" name="rm" value="{{ n.pk }}">Usuń</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 {% endfor %}
                 </tbody>
             </table>
